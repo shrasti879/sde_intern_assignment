@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log Query Interface</title>
+</head>
+<body>
+    <h1>Log Query Interface</h1>
+    <form action="/search" method="GET">
+        <label for="search">Search:</label>
+        <input type="text" id="search" name="query">
+        <button type="submit">Search</button>
+    </form>
+    <form action="/filter" method="GET">
+        <label for="field">Filter Field:</label>
+        <select id="field" name="field">
+            <option value="level">Level</option>
+            <option value="message">Message</option>
+            <option value="resourceId">Resource ID</option>
+            <!-- Add more options for other fields -->
+        </select>
+        <label for="value">Filter Value:</label>
+        <input type="text" id="value" name="value">
+        <button type="submit">Filter</button>
+    </form>
+    <ul id="logs"></ul>
+    <script>
+        async function fetchAndDisplayLogs() {
+            const response = await fetch('/get_logs');
+            const data = await response.json();
+            const logsElement = document.getElementById('logs');
+
+            logsElement.innerHTML = '';
+
+            data.logs.forEach(log => {
+                const li = document.createElement('li');
+                li.textContent = JSON.stringify(log);
+                logsElement.appendChild(li);
+            });
+        }
+
+        fetchAndDisplayLogs();
+    </script>
+</body>
+</html>
